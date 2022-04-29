@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  task-api-shared:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1
+
+
+services:
+
+  database:
+    image: mysql:5.7
+    container_name: task-api-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'task_api'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '23306:3306'
+    volumes:
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      task-api-shared:
+        ipv4_address: 172.20.0.3
+
+  php:
+    build: ./docker/php
+    container_name: task-api
+    image: task-api-image:8.0
+    ports:
+      - "28080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./:/var/www:cached
+    networks:
+      task-api-shared:
+        ipv4_address: 172.20.0.2
+    depends_on:
+      - database
