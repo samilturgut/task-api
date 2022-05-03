@@ -15,4 +15,13 @@ class Status
         self::PASSIVE => 'Passive',
         self::CLOSED => 'Closed',
     ];
+    
+    public static function getStatus(int $status)
+    {
+        if (!isset(self::$statusList[$status])) {
+            throw new \Exception('Status not found.');
+        }
+        
+        return self::$statusList[$status];
+    }
 }

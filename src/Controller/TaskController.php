@@ -9,7 +9,6 @@ use App\Enum\Status;
 use App\Forms\TaskForm;
 use App\Service\TaskService;
 use App\Validation\ValidationException;
-use App\Validation\Validator;
 use App\Validation\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -86,7 +85,6 @@ class TaskController extends BaseController
             $request = new RequestBuilder($request);
             $taskForm = new TaskForm();
             $taskForm->setCloseDescription($request->getParameter('closeDescription', null));
-            
             $taskForm->setStatus(Status::CLOSED);
     
             $validator->validate($taskForm);

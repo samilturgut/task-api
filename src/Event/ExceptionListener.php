@@ -14,12 +14,12 @@ class ExceptionListener
 {
     public function onKernelException(ExceptionEvent $event)
     {
-        /*if ($_ENV['APP_ENV'] === 'dev') {
+        if ($_ENV['APP_ENV'] === 'dev') {
             return;
-        }*/
-        
+        }
         
         $e = $event->getThrowable();
+        dd($e->getMessage().' File'.$e->getFile());
         $response = new Response();
         
         switch (get_class($e)) {

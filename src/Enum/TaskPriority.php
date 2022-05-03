@@ -13,4 +13,13 @@ class TaskPriority
         self::EMERGENCY => 'Emergency',
         self::NORMAL => 'Normal',
     ];
+    
+    public static function getPriority(int $priority)
+    {
+        if (!isset(self::$priorityList[$priority])) {
+            throw new \Exception('Status not found.');
+        }
+        
+        return self::$priorityList[$priority];
+    }
 }

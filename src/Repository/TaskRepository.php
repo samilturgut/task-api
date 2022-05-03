@@ -57,11 +57,7 @@ class TaskRepository extends ServiceEntityRepository
     {
         $query =  $this->createQueryBuilder('t')
             ->join('t.user', 'u')
-            ->innerJoin('t.categories', 'c', 'INNER')
-            ->select(
-                't.id, t.content, t.priority, t.status, t.createdAt, t.updatedAt',
-                'u.id as userId, u.email as userEmail'
-            );
+            ->leftJoin('t.categories', 'c', 'INNER');
         
         if (null !== $user){
             $query->where('t.user = :user')

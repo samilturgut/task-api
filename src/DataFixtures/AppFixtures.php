@@ -3,9 +3,13 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\Task;
 use App\Entity\User;
+use App\Enum\Status;
+use App\Enum\TaskPriority;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -36,15 +40,33 @@ class AppFixtures extends Fixture
         
         $category = new Category();
         $category->setName('Category 1');
-        $category->setCreatedAt();
+        $category->setCreatedAt(new \DateTime());
         $manager->persist($category);
         
         $category2 = new Category();
         $category2->setName('Category 2');
-        $category2->setCreatedAt();
+        $category2->setCreatedAt(new \DateTime());
         $manager->persist($category2);
+        
+        $task = new Task();
+        $task->setContent('Task 1');
+        $task->setStatus(Status::ACTIVE);
+        $task->setPriority(TaskPriority::NORMAL);
+        $task->setUser($user);
+        $task->addCategory($category);
+        $task->setCreatedAt(new \DateTime());
+        $manager->persist($task);
+        
+        $task2 = new Task();
+        $task2->setContent('Task 2');
+        $task2->setStatus(Status::ACTIVE);
+        $task2->setPriority(TaskPriority::NORMAL);
+        $task2->setUser($expert);
+        $task2->addCategory($category);
+        $task2->addCategory($category2);
+        $task2->setCreatedAt(new \DateTime());
+        $manager->persist($task2);
 
         $manager->flush();
-        
     }
 }

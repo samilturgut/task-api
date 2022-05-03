@@ -23,9 +23,9 @@ trait Timestampable
     /**
      * @param mixed $createdAt
      */
-    public function setCreatedAt(): void
+    public function setCreatedAt($createdAt): void
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = $createdAt;
     }
     
     /**

@@ -7,6 +7,7 @@ use App\Entity\Task;
 use App\Enum\Status;
 use App\Enum\TaskPriority;
 use App\Forms\TaskForm;
+use App\Mapper\TaskMapper;
 use App\Validation\ValidationException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
@@ -18,7 +19,7 @@ class TaskService extends AbstractService
             $user = $this->security->isGranted('ROLE_EXPERT') ? null : $this->security->getUser();
             $tasks = $this->_em->getRepository(Task::class)->findByUsers($user);
             
-            return $this->serializer->normalize($tasks);
+            return TaskMapper::map($tasks);
             
         } catch (ExceptionInterface $e) {
             $this->logger->error('Task normalize error!', [
@@ -57,14 +58,8 @@ class TaskService extends AbstractService
             $this->_em->persist($task);
             $this->_em->flush();
             
-            return [
-                'id' => $task->getId(),
-                'content' => $task->getContent(),
-                'priority' => $task->getPriority(),
-                'status' => $task->getStatus(),
-                'userEmail' => $task->getUser()->getEmail(),
-                'createdAt' => $task->getCreatedAt()->format('Y-m-d H:i:s'),
-            ];
+            return TaskMapper::map([$task]);
+            
         } catch (\Exception $e) {
             $this->logger->error('Create task error!', [
                 'error' => $e->getMessage(),

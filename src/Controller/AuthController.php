@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\AuthService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -24,6 +25,7 @@ class AuthController extends BaseController
     }
     
     #[Route('/api/logout', name: 'api.logout', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function logout(AuthService $authService): Response
     {
         $authService->logout($this->getUser());
